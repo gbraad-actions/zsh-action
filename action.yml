@@ -13,7 +13,7 @@ runs:
   steps:
     - name: Execute commands in zsh
       id: zsh-run
-      shell: zsh
+      shell: zsh {0}
       run: |
         # Ensure zsh configuration is properly sourced
         if [ -f ~/.zshrc ]; then
