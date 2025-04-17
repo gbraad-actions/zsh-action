@@ -1,0 +1,27 @@
+name: 'zsh Action'
+description: 'Execute commands in a properly initialized zsh environment'
+inputs:
+  run:
+    description: 'Commands to run in ZSh'
+    required: true
+outputs:
+  exit_code:
+    description: 'The exit code of the commands'
+    value: ${{ steps.zsh-run.outputs.exit_code }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Execute commands in zsh
+      id: zsh-run
+      shell: zsh
+      run: |
+        # Ensure zsh configuration is properly sourced
+        if [ -f ~/.zshrc ]; then
+          source ~/.zshrc
+        fi
+        
+        # Run the user-provided commands
+        ${{ inputs.run }}
+        
+        # Store the exit code as an output
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
