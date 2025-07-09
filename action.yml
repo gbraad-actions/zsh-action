@@ -28,6 +28,7 @@ runs:
         
         # Write user commands to a temp script
         TEMP_SCRIPT=$(mktemp)
+        trap 'rm -f "${TEMP_SCRIPT}"' EXIT
         echo "${{ inputs.run }}" > "${TEMP_SCRIPT}"
 
         if [ -n "${{ inputs.as_user }}" ]; then
@@ -39,5 +40,3 @@ runs:
         
         # Store the exit code as an output
         echo "exit_code=$?" >> $GITHUB_OUTPUT
-        rm -f "${TEMP_SCRIPT}"
-        
