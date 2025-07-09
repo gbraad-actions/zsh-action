@@ -20,7 +20,7 @@ runs:
       shell: bash
       run: |
         # Ensure zsh configuration is properly sourced
-        if [ -f ~/.zshrc ]; then
+        if [ -f ~${{ as_user }}/.zshrc ]; then
           ZSHRC_CMD="source ~/.zshrc;"
         else
           ZSHRC_CMD=""
