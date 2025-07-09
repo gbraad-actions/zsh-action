@@ -17,6 +17,7 @@ This GitHub Action executes commands in a properly initialized ZSh environment, 
       if type devenv >/dev/null 2>&1; then
         devenv dotfedora exec cat /etc/os-release
       fi
+    as_user: runner
 ```
 
 ## Inputs
@@ -24,6 +25,7 @@ This GitHub Action executes commands in a properly initialized ZSh environment, 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
 | `run` | Commands to run in ZSh | Yes | N/A |
+| `as_user` | User to run the commands as | No | "" |
 
 ## Outputs
 
