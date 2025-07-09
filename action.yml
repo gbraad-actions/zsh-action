@@ -4,6 +4,10 @@ inputs:
   run:
     description: 'Commands to run in ZSh'
     required: true
+  as_user:
+    description: 'User to run the commands as (optional)'
+    required: false
+    default: ""
 outputs:
   exit_code:
     description: 'The exit code of the commands'
@@ -13,15 +17,27 @@ runs:
   steps:
     - name: Execute commands in zsh
       id: zsh-run
-      shell: zsh {0}
+      shell: bash
       run: |
         # Ensure zsh configuration is properly sourced
         if [ -f ~/.zshrc ]; then
-          source ~/.zshrc
+          ZSHRC_CMD="source ~/.zshrc;"
+        else
+          ZSHRC_CMD=""
         fi
         
-        # Run the user-provided commands
-        ${{ inputs.run }}
+        # Write user commands to a temp script
+        TEMP_SCRIPT=$(mktemp)
+        echo "${{ inputs.run }}" > "${TEMP_SCRIPT}"
+
+        if [ -n "${{ inputs.as_user }}" ]; then
+          chmod o+r "${TEMP_SCRIPT}"
+          sudo -u "${{ inputs.as_user }}" zsh -c "${ZSHRC_CMD} source ${TEMP_SCRIPT}"
+        else
+          zsh -c "${ZSHRC_CMD} source ${TEMP_SCRIPT}"
+        fi
         
         # Store the exit code as an output
         echo "exit_code=$?" >> $GITHUB_OUTPUT
+        rm -f "${TEMP_SCRIPT}"
+        
