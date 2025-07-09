@@ -19,23 +19,17 @@ runs:
       id: zsh-run
       shell: bash
       run: |
-        # Ensure zsh configuration is properly sourced
-        if [ -f ~${{ as_user }}/.zshrc ]; then
-          ZSHRC_CMD="source ~/.zshrc;"
-        else
-          ZSHRC_CMD=""
-        fi
-        
         # Write user commands to a temp script
         TEMP_SCRIPT=$(mktemp)
         trap 'rm -f "${TEMP_SCRIPT}"' EXIT
         echo "${{ inputs.run }}" > "${TEMP_SCRIPT}"
 
+        ZSH_COMMAND='[ -f ~/.zshrc ] && source ~/.zshrc; source '"${TEMP_SCRIPT}"
         if [ -n "${{ inputs.as_user }}" ]; then
           chmod o+r "${TEMP_SCRIPT}"
-          sudo -u "${{ inputs.as_user }}" zsh -c "${ZSHRC_CMD} source ${TEMP_SCRIPT}"
+          sudo -u "${{ inputs.as_user }}" zsh -c "${ZSH_COMMAND}"
         else
-          zsh -c "${ZSHRC_CMD} source ${TEMP_SCRIPT}"
+          zsh -c "${ZSH_COMMAND}"
         fi
         
         # Store the exit code as an output
