@@ -17,7 +17,7 @@ runs:
   steps:
     - name: Execute commands in zsh
       id: zsh-run
-      shell: zsh
+      shell: zsh {0}
       run: |
         TEMP_SCRIPT=$(mktemp)
         trap 'rm -f "${TEMP_SCRIPT}"' EXIT
