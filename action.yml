@@ -21,10 +21,9 @@ runs:
       run: |
         TEMP_SCRIPT=$(mktemp)
         trap 'rm -f "${TEMP_SCRIPT}"' EXIT
-        echo "${{ inputs.run }}" > "${TEMP_SCRIPT}"
-
         # load profile if exists
-        [ -f ~/.zshrc ] && source ~/.zshrc
+        echo "[ -f ~/.zshrc ] && source ~/.zshrc" > "${TEMP_SCRIPT}"
+        echo "${{ inputs.run }}" >> "${TEMP_SCRIPT}"
 
         if [ -n "${{ inputs.as_user }}" ]; then
           chmod o+r "${TEMP_SCRIPT}"
