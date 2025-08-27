@@ -33,3 +33,7 @@ This GitHub Action executes commands in a properly initialized ZSh environment, 
 |--------|-------------|
 | `exit_code` | The exit code of the commands |
 
+
+> [!NOTE]
+> - Ensure your `.zshrc` is configured correctly for non-interactive shells.
+> - This action sources the commands which has side effects for back-ticks
