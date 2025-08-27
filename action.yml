@@ -23,12 +23,18 @@ runs:
         trap 'rm -f "${TEMP_SCRIPT}"' EXIT
         # load profile if exists
         echo "[ -f ~/.zshrc ] && source ~/.zshrc" > "${TEMP_SCRIPT}"
-        echo "${{ inputs.run }}" >> "${TEMP_SCRIPT}"
+
+        # writing input as contents of the script
+        cat <<'EOF' >> "${TEMP_SCRIPT}"
+        ${{ inputs.run }}
+        EOF
 
         if [ -n "${{ inputs.as_user }}" ]; then
           chmod o+r "${TEMP_SCRIPT}"
-          sudo -u "${{ inputs.as_user }}" zsh "${TEMP_SCRIPT}"
+          # executes the script as the specified user
+          sudo -E -u "${{ inputs.as_user }}" zsh "${TEMP_SCRIPT}"
         else
+          # sources the script in the current shell
           source "${TEMP_SCRIPT}"
         fi
 
