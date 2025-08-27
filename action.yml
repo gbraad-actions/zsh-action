@@ -17,20 +17,20 @@ runs:
   steps:
     - name: Execute commands in zsh
       id: zsh-run
-      shell: bash
+      shell: zsh
       run: |
-        # Write user commands to a temp script
         TEMP_SCRIPT=$(mktemp)
         trap 'rm -f "${TEMP_SCRIPT}"' EXIT
         echo "${{ inputs.run }}" > "${TEMP_SCRIPT}"
 
-        ZSH_COMMAND='[ -f ~/.zshrc ] && source ~/.zshrc; source '"${TEMP_SCRIPT}"
+        # load profile if exists
+        [ -f ~/.zshrc ] && source ~/.zshrc
+
         if [ -n "${{ inputs.as_user }}" ]; then
           chmod o+r "${TEMP_SCRIPT}"
-          sudo -u "${{ inputs.as_user }}" zsh -c "${ZSH_COMMAND}"
+          sudo -u "${{ inputs.as_user }}" zsh "${TEMP_SCRIPT}"
         else
-          zsh -c "${ZSH_COMMAND}"
+          source "${TEMP_SCRIPT}"
         fi
-        
-        # Store the exit code as an output
+
         echo "exit_code=$?" >> $GITHUB_OUTPUT
