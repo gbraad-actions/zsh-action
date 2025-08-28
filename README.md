@@ -37,3 +37,4 @@ This GitHub Action executes commands in a properly initialized ZSh environment, 
 > [!NOTE]
 > - Ensure your `.zshrc` is configured correctly for non-interactive shells.
 > - This action sources the commands which has side effects for back-ticks
+> - composite only allows for static output definition; use results instead

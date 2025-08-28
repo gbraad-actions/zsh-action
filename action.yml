@@ -12,6 +12,9 @@ outputs:
   exit_code:
     description: 'The exit code of the commands'
     value: ${{ steps.zsh-run.outputs.exit_code }}
+  results:
+    description: 'Outputs set by the commands stored in results file'
+    value: ${{ steps.zsh-run.outputs.results }}
 runs:
   using: 'composite'
   steps:
@@ -41,3 +44,4 @@ runs:
         fi
 
         echo "exit_code=$?" >> $GITHUB_OUTPUT
+        echo "results=$(echo $GITHUB_OUTPUT)" >> $GITHUB_OUTPUT
