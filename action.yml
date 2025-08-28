@@ -23,6 +23,8 @@ runs:
         trap 'rm -f "${TEMP_SCRIPT}"' EXIT
         # load profile if exists
         echo "[ -f ~/.zshrc ] && source ~/.zshrc" > "${TEMP_SCRIPT}"
+        # set output file location
+        echo "GITHUB_OUTPUT=$GITHUB_OUTPUT" >> "${TEMP_SCRIPT}"
 
         # writing input as contents of the script
         cat <<'EOF' >> "${TEMP_SCRIPT}"
