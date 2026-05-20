@@ -43,5 +43,7 @@ runs:
           source "${TEMP_SCRIPT}"
         fi
 
-        echo "exit_code=$?" >> $GITHUB_OUTPUT
+        EXIT_CODE=$?
+        echo "exit_code=${EXIT_CODE}" >> $GITHUB_OUTPUT
         echo "results=$(echo $GITHUB_OUTPUT)" >> $GITHUB_OUTPUT
+        exit ${EXIT_CODE}
